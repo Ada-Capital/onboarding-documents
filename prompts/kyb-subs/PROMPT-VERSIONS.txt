@@ -1,0 +1,7 @@
+Gerado em 2026-09-08 por tools/build_handoff.py
+core: subs-core-v1.2
+D6: subs-d6-v1.1  (D6-ubo-identity-document.md)
+D1: subs-d1-v1.3  (D1-certificate-of-incorporation.md)
+DT: subs-dt-v1.3  (DT-company-tax-identification.md)
+D3: subs-d3-v1.1  (D3-proof-of-address.md)
+D4: subs-d4-v2  (D4-financial-capacity.md)

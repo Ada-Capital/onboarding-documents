@@ -1,0 +1,50 @@
+{
+  "_comment": "Codigo de finding -> estado do documento. Configuracao de Compliance: mudar aqui nao exige mexer em prompt. Regra: REJECT se >=1 codigo REJECT; senao REVIEW se >=1 codigo REVIEW ou confidence == low; senao APPROVE (findings vazios ou so INFO_NOTE).",
+  "version": "subs-core-v1.2",
+  "rule": {
+    "REJECT": "any finding with a REJECT-mapped code",
+    "REVIEW": "else, any finding with a REVIEW-mapped code, or confidence == 'low'",
+    "APPROVE": "else (no findings, or only INFO_NOTE)"
+  },
+  "codes": {
+    "IMMUTABLE_ID_MISMATCH": "REJECT",
+    "PERSON_MISMATCH": "REJECT",
+    "INFLOWS_NOT_QUALIFYING": "REJECT",
+    "DOC_OUTDATED": "REJECT",
+    "PROVIDER_FRAUD_VERDICT": "REJECT",
+
+    "MINOR_NAME_MISMATCH": "REVIEW",
+    "NAME_ID_CONFLICT": "REVIEW",
+    "DOC_TYPE_UNRECOGNIZED": "REVIEW",
+    "DOC_TYPE_WRONG_FOR_SLOT": "REVIEW",
+    "DOC_EXPIRED": "REVIEW",
+    "DOC_STALE": "REVIEW",
+    "DOC_UNDATED": "REVIEW",
+    "DOC_SUPERSEDED": "REVIEW",
+    "ILLEGIBLE": "REVIEW",
+    "REQUIRED_FIELD_MISSING": "REVIEW",
+    "SIGNATURE_MISSING": "REVIEW",
+    "DECLARED_ID_MISMATCH": "REVIEW",
+    "DATE_MISMATCH": "REVIEW",
+    "INTERNAL_INCONSISTENCY": "REVIEW",
+    "THIRD_PARTY_HOLDER": "REVIEW",
+    "ADDRESS_MISMATCH": "REVIEW",
+    "JURISDICTION_MISMATCH": "REVIEW",
+    "REGISTRATION_STATUS_INACTIVE": "REVIEW",
+    "UNDERAGE": "REVIEW",
+    "UNDECLARED_PERSON": "REVIEW",
+    "OWNERSHIP_PCT_MISMATCH": "REVIEW",
+    "REVENUE_BAND_MISMATCH": "REVIEW",
+    "VOLUME_INCONSISTENT": "REVIEW",
+    "ACCOUNTING_INCONSISTENT": "REVIEW",
+
+    "INFO_NOTE": "INFO"
+  },
+  "emitted_by_model": "all codes above except PROVIDER_FRAUD_VERDICT (injected by the liveness/anti-fraud provider at consolidation)",
+  "confidence_routing": { "low": "REVIEW (desk) even with no findings" },
+  "attempt_mapping_proposal": {
+    "APPROVE": { "status": "COMPLETED", "result": "APPROVED" },
+    "REJECT": { "status": "COMPLETED", "result": "REJECTED", "rejectionLabels": "REJECT codes of the findings", "resultMessage": "detail of the first REJECT finding", "retryable": "true (to confirm exceptions: PROVIDER_FRAUD_VERDICT, PERSON_MISMATCH)" },
+    "REVIEW": { "status": "PROCESSING or UNDER_REVIEW", "desk_queue": true, "note": "never auto-reject, never auto-RFI" }
+  }
+}

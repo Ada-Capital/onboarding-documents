@@ -1,0 +1,46 @@
+{
+  "_comment": "Defaults por agent. Passar no envelope em 'params'. Compliance pode sobrescrever por fluxo. Valores de politica do D4 fixados em 2026-08-13 (KYB main) e 2026-09-08 (regra do extrato).",
+  "common": {
+    "type_confidence_floor": 50
+  },
+  "D6": {
+    "min_age": 18,
+    "mrz_check": true
+  },
+  "D1": {
+    "registry_extract_max_age_days": 90,
+    "ubo_threshold_pct": 25,
+    "pct_rounding_tolerance": 1.0,
+    "threshold_proximity_pct": 2.0
+  },
+  "DT": {
+    "tax_doc_max_age_days": 90
+  },
+  "D3": {
+    "poa_info_after_days": 90,
+    "poa_reject_after_days": 180
+  },
+  "DL": {
+    "max_statement_age_months": 18,
+    "bank_inflow_haircut": 0.9,
+    "flow_headroom_multiplier": 2.0,
+    "limit_rounding_usd": 10000,
+    "fx_rates": []
+  },
+  "D4": {
+    "revenue_band_tolerance": 1,
+    "max_statement_age_months": 18,
+    "new_company_months": 12,
+    "rounding_tolerance_pct": 0.5,
+    "flow_headroom_multiplier": 2.0,
+    "equity_turnover_fraction": 0.75,
+    "third_party_multiplier": 50,
+    "limit_rounding_usd": 10000,
+    "bank_inflow_haircut": 0.90,
+    "min_distinct_counterparties": 2,
+    "bank_statement_min_months": 3,
+    "fx_source": "Google Finance",
+    "fx_rates": [],
+    "_fx_note": "fx_rates = [{pair, date, rate, source_url}] injetado pelo pipeline; o modelo devolve derived.fx_requests quando falta taxa -> buscar (par + data-ancora; fim de semana -> dia util anterior) e re-rodar. O modelo nunca usa taxa de memoria."
+  }
+}

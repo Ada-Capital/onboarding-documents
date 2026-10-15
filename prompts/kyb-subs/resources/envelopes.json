@@ -1,0 +1,83 @@
+{
+  "_comment": "Contrato do envelope que cada Lambda monta e manda como mensagem 'user' junto com as imagens do documento. system = prompts/SYSTEM-<agent>.txt. Chaves de 'declared' sao EXATAMENTE as do payload da API; campo nao enviado pelo cliente vai como null.",
+  "envelope_skeleton": {
+    "analysis_date": "YYYY-MM-DD",
+    "slot": { "endpoint": "", "field": "", "documentType": "" },
+    "declared": {},
+    "document": { "filename": "", "mime": "", "pages": ["<imagem por pagina/face>"], "faces": ["front", "back"] },
+    "params": { "<ver params-defaults.json: common + agent>": "..." },
+    "versions": { "core": "subs-core-v1.2", "specialization": "<versao do bloco>" }
+  },
+
+  "D6": {
+    "slot": { "endpoint": "POST /v2/account/ubos", "field": "uploadedIdentificationId", "documentType": "PASSPORT | ID | DRIVERS-LICENSE | RESIDENCE-PERMIT" },
+    "declared": {
+      "fullName": "", "dateOfBirth": "YYYY-MM-DD", "countryOfTaxId": "BRA", "taxIdNumber": "", "documentCountry": "BRA",
+      "country": "", "state": "", "city": "", "zipCode": "", "streetLine1": "", "streetLine2": "", "streetLine3": ""
+    },
+    "versions": { "core": "subs-core-v1.2", "specialization": "subs-d6-v1.1" }
+  },
+
+  "D1": {
+    "slot": { "endpoint": "POST /v2/kyc/new-level-1/api", "field": "certificateOfIncorporationDocumentId", "documentType": "CERTIFICATE-OF-INCORPORATION" },
+    "declared": {
+      "companyLegalName": "", "companyRegistrationNumber": "", "taxIdentificationNumberTin": "", "companyCountry": "",
+      "companyStreetLine1": "", "companyStreetLine2": "", "companyStreetLine3": "", "companyCity": "", "companyState": "", "companyZipCode": "",
+      "businessActivityDescription": "",
+      "ubos": [ { "fullName": "", "percentageOfOwnership": "", "hasControl": "" } ]
+    },
+    "versions": { "core": "subs-core-v1.2", "specialization": "subs-d1-v1.3" }
+  },
+
+  "DT": {
+    "slot": { "endpoint": "POST /v2/kyc/new-level-1/api", "field": "taxIdentificationDocumentId", "documentType": "COMPANY-TAX-IDENTIFICATION-DOCUMENT" },
+    "declared": {
+      "companyLegalName": "", "taxIdentificationNumberTin": "", "countryTaxResidence": "", "companyCountry": "", "companyRegistrationNumber": "",
+      "companyStreetLine1": "", "companyStreetLine2": "", "companyStreetLine3": "", "companyCity": "", "companyState": "", "companyZipCode": "",
+      "businessActivityDescription": "", "numberOfEmployees": "", "estimatedAnnualRevenueUsd": ""
+    },
+    "versions": { "core": "subs-core-v1.2", "specialization": "subs-dt-v1.3" }
+  },
+
+  "D3_company": {
+    "slot": { "endpoint": "POST /v2/account/address/proof-of-address/api", "field": "uploadedPoAId", "documentType": "PROOF-OF-ADDRESS-COMPANY" },
+    "declared": {
+      "companyLegalName": "", "companyStreetLine1": "", "companyStreetLine2": "", "companyStreetLine3": "", "companyCity": "", "companyState": "",
+      "companyZipCode": "", "companyCountry": "", "taxIdentificationNumberTin": ""
+    },
+    "versions": { "core": "subs-core-v1.2", "specialization": "subs-d3-v1.1" }
+  },
+
+  "D3_ubo": {
+    "slot": { "endpoint": "POST /v2/account/address/proof-of-address/api", "field": "uploadedPoAId", "documentType": "PROOF-OF-ADDRESS" },
+    "declared": {
+      "fullName": "", "streetLine1": "", "streetLine2": "", "streetLine3": "", "city": "", "state": "", "zipCode": "", "country": "", "taxIdNumber": ""
+    },
+    "versions": { "core": "subs-core-v1.2", "specialization": "subs-d3-v1.1" },
+    "_gap": "o endpoint nao recebe uboId: o backend precisa resolver a qual UBO o documento pertence para montar este declared"
+  },
+
+  "D4_pofc": {
+    "slot": { "endpoint": "POST /v2/account/proof-of-financial-capacity/api", "field": "uploadedPoFCId", "documentType": "PROOF-OF-FINANCIAL-CAPACITY" },
+    "declared": {
+      "companyLegalName": "", "taxIdentificationNumberTin": "", "companyRegistrationNumber": "", "countryTaxResidence": "",
+      "estimatedAnnualRevenueUsd": "", "estimatedMonthlyVolumeUsd": "", "sourceOfFundsAndIncome": "", "reasonForAccountOpening": "",
+      "numberOfEmployees": "", "businessType": null, "businessIndustries": null,
+      "ubos": [ { "fullName": "", "taxIdNumber": "" } ]
+    },
+    "context": { "company_age_months": "<do derived do DT, se ja rodou; senao null>" },
+    "versions": { "core": "subs-core-v1.2", "specialization": "subs-d4-v2" }
+  },
+
+  "D4_por": {
+    "slot": { "endpoint": "POST /v2/kyc/usd/api", "field": "proofOfRevenueDocId", "documentType": "PROOF-OF-REVENUE" },
+    "declared": {
+      "companyLegalName": "", "taxIdentificationNumberTin": "", "companyRegistrationNumber": "", "countryTaxResidence": "",
+      "estimatedAnnualRevenueUsd": "", "estimatedMonthlyVolumeUsd": "", "sourceOfFundsAndIncome": "", "reasonForAccountOpening": "",
+      "numberOfEmployees": "", "businessType": "", "businessIndustries": [],
+      "ubos": [ { "fullName": "", "taxIdNumber": "" } ]
+    },
+    "context": { "company_age_months": "<do derived do DT, se ja rodou; senao null>" },
+    "versions": { "core": "subs-core-v1.2", "specialization": "subs-d4-v2" }
+  }
+}
